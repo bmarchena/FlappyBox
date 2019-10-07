@@ -6,6 +6,10 @@ public class GameLoop extends GameBase {
     int mvCount = 0;
     int spCount = 0;
     int tmCount = 0;
+    int tm;
+    int recTm;
+    int score = -2;
+
     int speed = 10;
 
 
@@ -57,16 +61,14 @@ public class GameLoop extends GameBase {
             collisionDetect();
         }
 
-        if(released[EN]){gameOver = false; genObstacles(); player.x =100; player.y= 400; tmCount = 0; released[EN] = false;}
+        if(released[EN]){restartGame();}
 
 
 
     }
 
     private void collisionDetect() {
-//        if(obstacle1.x < 0 - obstacle1.w){genUpperObstacle();}
-//
-//        if(obstacle2.x < 0 - obstacle2.w){genLowerObstacle();}
+
 
         if(obstacle1.overlaps(player)) {gameOver = true; System.out.println("COLLIDED OB1");}
         if(obstacle2.overlaps(player)) {gameOver = true; System.out.println("COLLIDED OB2");}
@@ -77,14 +79,29 @@ public class GameLoop extends GameBase {
 
     }
 
+    public void restartGame(){
+        gameOver = false;
+        score = -2;
+        genObstacles();
+        player.x =100;
+        player.y= 400;
+        tmCount = 0;
+        released[EN] = false;
+    }
+
     @Override
     public void paint(Graphics g) {
+        tm = tmCount/60;
         super.paint(g);
         player.draw(g);
         drawObstacles(g);
-        g.drawString("Current Time: " + Integer.toString(tmCount/60), 800, 50);
+        g.drawString("Score:   " + Integer.toString(score), 800, 30);
+        g.drawString("Current Time: " + Integer.toString(tm), 800, 50);
+        g.drawString("Record Time:  " + Integer.toString(recTm), 800, 70);
+
 
         if(gameOver) g.drawString("GAME OVER!", player.x, player.y - 10);
+        if(tm > recTm) recTm = tm;
 
     }
 
@@ -124,6 +141,7 @@ public class GameLoop extends GameBase {
     private void genObstacles(){
         genUpperObstacle();
         genLowerObstacle();
+        score += 2;
     }
 
     private void moveObstacles(){
