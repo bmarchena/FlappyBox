@@ -1,28 +1,120 @@
 import java.awt.*;
+import java.util.Random;
 
 public class GameLoop extends GameBase {
-    Rect testRect;
-    int count = 0;
+    Rect player;
+    int mvCount = 0;
+    int spCount = 0;
+    int speed = 10;
+
+    boolean gameOver = false;
+
+    Random random = new Random();
+
+    Obstacle obstacle1;
+    Obstacle obstacle2;
+    Obstacle[] obstacles = new Obstacle[2];
 
     @Override
     public void initialize() {
 
-        testRect = new Rect(500, 400, 100, 100);
+        player = new Rect(100, 400, 100, 100);
+
+        genObstacles();
 
 
     }
 
     @Override
     public void inTheGameLoop() {
-        count++;
-        if(count==4){testRect.moveDn(10); count = 0;}
-        if(released[SP]){testRect.moveUp(10); released[SP] = false;}
+
+        mvCount++;
+        spCount++;
+
+        if(!gameOver) {
+            if(spCount == 900){speed += 2;}
+
+            if (mvCount == 2) {
+                player.moveDn(5);
+                mvCount = 0;
+            }
+            if (released[SP]) {
+                player.moveUp(50);
+                released[SP] = false;
+            }
+
+            if (obstacle1.x > 0 - obstacle1.w) {
+                obstacle1.moveLt(speed);
+            }
+
+            if (obstacle1.x < 500) {
+                obstacle2.moveLt(speed);
+            }
+            if (obstacle2.x < 0 - obstacle2.w) {
+                genObstacles();
+            }
+
+            collisionDetect();
+        }
+
+
+
+    }
+
+    private void collisionDetect() {
+        if(obstacle1.overlaps(player)) {gameOver = true; System.out.println("COLLIDED OB1");}
+        if(obstacle2.overlaps(player)) {gameOver = true; System.out.println("COLLIDED OB2");}
+
+
+
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        testRect.draw(g);
+        player.draw(g);
+        drawObstacles(g);
 
+
+    }
+
+    private static int getRandomNumberInRange(int min, int max) {
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+        return (int)(Math.random() * ((max - min) + 1)) + min;
+    }
+
+    private void genObstacles(){
+        int y;
+        int w;
+        int h;
+
+        w = getRandomNumberInRange(100,300);
+        h = getRandomNumberInRange(0,400);
+        obstacle1 = new UpperObstacle(w, h);
+
+
+        y = getRandomNumberInRange(400,800);
+        w = getRandomNumberInRange(100,300);
+        h = 800 - y;
+        obstacle2 = new LowerObstacle(y, w, h);
+
+        obstacles[0] = obstacle1;
+        obstacles[1] = obstacle2;
+
+    }
+
+    private void moveObstacles(Obstacle[] obstacles, int dx){
+        for(int i=0;i<obstacles.length;i++){
+            obstacles[i].moveLt(dx);
+        }
+
+    }
+
+    private void drawObstacles(Graphics g){
+        for(int i=0;i<2;i++){
+            obstacles[i].draw(g);
+        }
     }
 }
