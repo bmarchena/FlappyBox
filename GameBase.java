@@ -9,7 +9,8 @@ public abstract class GameBase extends Applet implements Runnable, KeyListener, 
 	public static final int LT = KeyEvent.VK_LEFT;
 	public static final int RT = KeyEvent.VK_RIGHT;
 	public static final int SP = KeyEvent.VK_SPACE;
-	
+	public static final int EN = KeyEvent.VK_ENTER;
+
 	public static final int _1 = KeyEvent.VK_1;
 	public static final int _2 = KeyEvent.VK_2;
 	public static final int _3 = KeyEvent.VK_3;

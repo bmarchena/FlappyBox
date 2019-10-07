@@ -5,6 +5,7 @@ public class GameLoop extends GameBase {
     Rect player;
     int mvCount = 0;
     int spCount = 0;
+    int tmCount = 0;
     int speed = 10;
 
     boolean gameOver = false;
@@ -28,10 +29,13 @@ public class GameLoop extends GameBase {
     @Override
     public void inTheGameLoop() {
 
-        mvCount++;
-        spCount++;
+
 
         if(!gameOver) {
+            mvCount++;
+            spCount++;
+            tmCount++;
+
             if(spCount == 900){speed += 2;}
 
             if (mvCount == 2) {
@@ -43,13 +47,8 @@ public class GameLoop extends GameBase {
                 released[SP] = false;
             }
 
-            if (obstacle1.x > 0 - obstacle1.w) {
-                obstacle1.moveLt(speed);
-            }
+            moveObstacles();
 
-            if (obstacle1.x < 500) {
-                obstacle2.moveLt(speed);
-            }
             if (obstacle2.x < 0 - obstacle2.w) {
                 genObstacles();
             }
@@ -57,13 +56,19 @@ public class GameLoop extends GameBase {
             collisionDetect();
         }
 
+        if(released[EN]){gameOver = false; genObstacles(); player.x =100; player.y= 400; tmCount = 0; released[EN] = false;}
+
 
 
     }
 
     private void collisionDetect() {
+
+
         if(obstacle1.overlaps(player)) {gameOver = true; System.out.println("COLLIDED OB1");}
         if(obstacle2.overlaps(player)) {gameOver = true; System.out.println("COLLIDED OB2");}
+
+        if(player.y + player.h > 699) gameOver=true;
 
 
 
@@ -74,7 +79,9 @@ public class GameLoop extends GameBase {
         super.paint(g);
         player.draw(g);
         drawObstacles(g);
+        g.drawString("Current Time: " + Integer.toString(tmCount/60), 800, 50);
 
+        if(gameOver) g.drawString("GAME OVER!", player.x, player.y - 10);
 
     }
 
@@ -91,11 +98,11 @@ public class GameLoop extends GameBase {
         int h;
 
         w = getRandomNumberInRange(100,300);
-        h = getRandomNumberInRange(0,400);
+        h = getRandomNumberInRange(200,400);
         obstacle1 = new UpperObstacle(w, h);
 
 
-        y = getRandomNumberInRange(400,800);
+        y = getRandomNumberInRange(400,600);
         w = getRandomNumberInRange(100,300);
         h = 800 - y;
         obstacle2 = new LowerObstacle(y, w, h);
@@ -105,11 +112,14 @@ public class GameLoop extends GameBase {
 
     }
 
-    private void moveObstacles(Obstacle[] obstacles, int dx){
-        for(int i=0;i<obstacles.length;i++){
-            obstacles[i].moveLt(dx);
+    private void moveObstacles(){
+        if (obstacle1.x > 0 - obstacle1.w) {
+            obstacle1.moveLt(speed);
         }
 
+        if (obstacle1.x < 500) {
+            obstacle2.moveLt(speed);
+        }
     }
 
     private void drawObstacles(Graphics g){
