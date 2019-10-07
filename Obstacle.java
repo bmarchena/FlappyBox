@@ -6,11 +6,5 @@ public class Obstacle extends Rect {
         super(x, y, w, h);
     }
 
-
-
-//        static int y = 0;
-//        static int x = 1200;
-//        int w = random.nextInt(400);
-//        int y = random.nextInt(100);
 }
 

@@ -8,6 +8,7 @@ public class GameLoop extends GameBase {
     int tmCount = 0;
     int speed = 10;
 
+
     boolean gameOver = false;
 
     Random random = new Random();
@@ -36,7 +37,7 @@ public class GameLoop extends GameBase {
             spCount++;
             tmCount++;
 
-            if(spCount == 900){speed += 2;}
+            if(spCount == 900){speed += 2; spCount = 0;}
 
             if (mvCount == 2) {
                 player.moveDn(5);
@@ -63,7 +64,9 @@ public class GameLoop extends GameBase {
     }
 
     private void collisionDetect() {
-
+//        if(obstacle1.x < 0 - obstacle1.w){genUpperObstacle();}
+//
+//        if(obstacle2.x < 0 - obstacle2.w){genLowerObstacle();}
 
         if(obstacle1.overlaps(player)) {gameOver = true; System.out.println("COLLIDED OB1");}
         if(obstacle2.overlaps(player)) {gameOver = true; System.out.println("COLLIDED OB2");}
@@ -92,7 +95,7 @@ public class GameLoop extends GameBase {
         return (int)(Math.random() * ((max - min) + 1)) + min;
     }
 
-    private void genObstacles(){
+    private void genUpperObstacle(){
         int y;
         int w;
         int h;
@@ -102,14 +105,25 @@ public class GameLoop extends GameBase {
         obstacle1 = new UpperObstacle(w, h);
 
 
+        obstacles[0] = obstacle1;
+
+    }
+
+    private void genLowerObstacle(){
+        int y;
+        int w;
+        int h;
+
         y = getRandomNumberInRange(400,600);
         w = getRandomNumberInRange(100,300);
         h = 800 - y;
         obstacle2 = new LowerObstacle(y, w, h);
-
-        obstacles[0] = obstacle1;
         obstacles[1] = obstacle2;
+    }
 
+    private void genObstacles(){
+        genUpperObstacle();
+        genLowerObstacle();
     }
 
     private void moveObstacles(){
