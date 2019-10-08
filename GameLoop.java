@@ -6,6 +6,8 @@ public class GameLoop extends GameBase {
     int mvCount = 0;
     int spCount = 0;
     int tmCount = 0;
+
+    int lvl = 1;
     int tm;
     int recTm;
     int score = -2;
@@ -25,7 +27,7 @@ public class GameLoop extends GameBase {
     @Override
     public void initialize() {
 
-        player = new Rect(100, 400, 100, 100);
+        player = new Rect(100, 400, 50, 50);
 
         genObstacles();
 
@@ -42,12 +44,13 @@ public class GameLoop extends GameBase {
             spCount++;
             tmCount++;
 
-            if(spCount == 900){speed += 2; spCount = 0;}
+            if(spCount == 600){speed += 1; lvl++; spCount = 0;}
 
-            if (mvCount == 2) {
-                player.moveDn(7);
-                mvCount = 0;
-            }
+            player.moveDn(4);
+//            if (mvCount == 2) {
+//                player.moveDn(7);
+//                mvCount = 0;
+//            }
             if (released[SP]) {
                 player.moveUp(100);
                 released[SP] = false;
@@ -88,6 +91,7 @@ public class GameLoop extends GameBase {
         player.x =100;
         player.y= 400;
         tmCount = 0;
+        lvl = 1;
         released[EN] = false;
     }
 
@@ -97,10 +101,11 @@ public class GameLoop extends GameBase {
         super.paint(g);
         player.draw(g);
         drawObstacles(g);
-        g.drawString("High Score: " + Integer.toString(hiscore), 800, 30);
+        g.drawString("Level " + Integer.toString(lvl), 800, 30);
         g.drawString("Score:   " + Integer.toString(score), 800, 50);
-        g.drawString("Current Time: " + Integer.toString(tm), 800, 70);
-        g.drawString("Record Time:  " + Integer.toString(recTm), 800, 90);
+        g.drawString("High Score: " + Integer.toString(hiscore), 800, 70);
+        g.drawString("Current Time: " + Integer.toString(tm), 800, 90);
+        g.drawString("Record Time:  " + Integer.toString(recTm), 800, 110);
 
 
         if(gameOver) g.drawString("GAME OVER!", player.x, player.y - 10);
