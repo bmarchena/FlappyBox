@@ -57,17 +57,12 @@ public abstract class GameBase extends Applet implements Runnable, KeyListener, 
 	}
 	
 	
-	public void keyPressed(KeyEvent e)
-	{
-//		released[e.getKeyCode()] = true;
-	}
+	public void keyPressed(KeyEvent e) { }
 
-	
 	public void keyReleased(KeyEvent e)
 	{
 		released[e.getKeyCode()] = true;
 	}
-
 	
 	public void keyTyped(KeyEvent e) {}
 	

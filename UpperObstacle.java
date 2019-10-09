@@ -1,8 +1,6 @@
-import java.util.Random;
-
 public class UpperObstacle extends Obstacle {
 
-    static int y = 0;
+    static int y = 50;
     static int x = 1200;
 
 

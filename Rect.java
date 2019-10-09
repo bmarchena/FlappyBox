@@ -38,11 +38,7 @@ public class Rect
 		g.drawRect(x, y, w, h);
 	}
 
-	public void rotate(){angle -= 90;}
-
 	public void moveLt(int dx){ x -= dx;}
-
-	public void moveRt(int dx){ x += dx;}
 
 	public void moveUp(int dx){ y -= dx;}
 

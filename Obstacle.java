@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class Obstacle extends Rect {
 
     public Obstacle(int x, int y, int w, int h) {
