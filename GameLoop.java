@@ -45,8 +45,6 @@ public class GameLoop extends GameBase {
 
         //create obstacles
         genObstacles();
-
-
     }
 
     @Override
@@ -62,12 +60,12 @@ public class GameLoop extends GameBase {
             player.moveDn(GRAV_SPEED);
 
             //if the speed counter = 600 (7 - 10 sec generally) increase speed and level
-            if(spCount == 600){speed++; lvl++; System.out.println("Before spCount is: " + spCount); spCount = 0; System.out.println("Then it's: " + spCount);}
+            if(spCount == 600){speed++; lvl++; spCount = 0;}
 
 
 
             //check if player jumped
-            playerJump();
+            if(playerJump()) player.moveUp(JUMP_HEIGHT);
 
             //move obstacles across the screen
             moveObstacles();
@@ -94,6 +92,7 @@ public class GameLoop extends GameBase {
     }
 
     public void restartGame(){
+        //reinitialize game conditions
         gameOver = false;
         score = -2;
         speed = 10;
@@ -107,7 +106,7 @@ public class GameLoop extends GameBase {
 
     @Override
     public void paint(Graphics g) {
-        tm = tmCount/60;
+        //paint all objects and ui
         super.paint(g);
         player.draw(g);
         drawObstacles(g);
@@ -116,20 +115,25 @@ public class GameLoop extends GameBase {
     }
 
     private static int getRandomNumberInRange(int min, int max) {
+        //used to generate random parameters for obstacles
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");
         }
         return (int)(Math.random() * ((max - min) + 1)) + min;
     }
 
-    private void playerJump(){
+    private boolean playerJump(){
+        //checks if player jumped
         if (released[SP]) {
-            player.moveUp(JUMP_HEIGHT);
             released[SP] = false;
+            return true;
         }
+        return false;
     }
 
     public void showStats(Graphics g){
+        tm = tmCount/60;
+
         //display level
         g.drawString("Level " + Integer.toString(lvl), 50, 20);
 
@@ -179,6 +183,7 @@ public class GameLoop extends GameBase {
         w = getRandomNumberInRange(100,300);
         h = getRandomNumberInRange(200,400);
         obstacles[0] = new UpperObstacle(w, h);
+        score++;
 
     }
 
@@ -191,13 +196,13 @@ public class GameLoop extends GameBase {
         w = getRandomNumberInRange(100,300);
         h = 680 - y;
         obstacles[1] = new LowerObstacle(y, w, h);
+        score++;
 
     }
 
     private void genObstacles(){
         genUpperObstacle();
         genLowerObstacle();
-        score += 2;
     }
 
     private void moveObstacles(){
