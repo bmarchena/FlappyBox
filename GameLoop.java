@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class GameLoop extends GameBase {
     //gravity and jump constants
-    final static int GRAV_SPEED = 4;
+    final static int GRAV_SPEED = 5;
     private static final int JUMP_HEIGHT = 100;
 
     //player character
@@ -19,6 +19,8 @@ public class GameLoop extends GameBase {
     int recTm;
     int score = -2;
     int hiscore = 0;
+
+    String streak = "";
 
     //initial speed of the obstacles
     int speed = 10;
@@ -39,7 +41,7 @@ public class GameLoop extends GameBase {
     @Override
     public void initialize() {
         //initialize player
-        player = new Rect(100, 400, 50, 50);
+        player = new Rect(100, 400, 30, 30);
 
         //create obstacles
         genObstacles();
@@ -59,8 +61,9 @@ public class GameLoop extends GameBase {
             //pull player down
             player.moveDn(GRAV_SPEED);
 
-            //if the speed counter = 600 (10 sec) increase speed and level
-            if(spCount == 600){speed += 1; lvl++; spCount = 0;}
+            //if the speed counter = 600 (7 - 10 sec generally) increase speed and level
+            if(spCount == 600){speed++; lvl++; System.out.println("Before spCount is: " + spCount); spCount = 0; System.out.println("Then it's: " + spCount);}
+
 
 
             //check if player jumped
@@ -91,7 +94,6 @@ public class GameLoop extends GameBase {
     }
 
     public void restartGame(){
-        
         gameOver = false;
         score = -2;
         speed = 10;
@@ -146,19 +148,21 @@ public class GameLoop extends GameBase {
 
 
         //scorestreaks
-        if(lvl == 1 && !gameOver) g.drawString("Amateur hour.", 50, 40);
-        if(lvl == 2 && !gameOver) g.drawString("Aw, your first steps.", 50, 40);
-        if(lvl == 3 && !gameOver) g.drawString("Not bad.", 50, 40);
-        if(lvl == 4 && !gameOver) g.drawString("You're pretty good.", 50, 40);
-        if(lvl == 5 && !gameOver) g.drawString("Now we're getting somewhere.", 50, 40);
-        if(lvl == 6 && !gameOver) g.drawString("Kickin' it up a notch.", 50, 40);
-        if(lvl == 7 && !gameOver) g.drawString("Eyes on the prize.", 50, 40);
-        if(lvl == 8 && !gameOver) g.drawString("Zoom, zoom, zoom.",50, 40);
-        if(lvl == 9 && !gameOver) g.drawString("It's all uphill from here.", 50, 40);
-        if(lvl == 10 && !gameOver) g.drawString("Now THIS is pod racing.", 50, 40);
+        if(lvl == 1 && !gameOver) streak = "Amateur hour.";
+        if(lvl == 2 && !gameOver) streak = "Your first steps.";
+        if(lvl == 3 && !gameOver) streak = "Not bad.";
+        if(lvl == 4 && !gameOver) streak = "Now we're getting somewhere.";
+        if(lvl == 5 && !gameOver) streak = "You're pretty good.";
+        if(lvl == 6 && !gameOver) streak = "Kickin' it up a notch.";
+        if(lvl == 7 && !gameOver) streak = "Eyes on the prize.";
+        if(lvl == 8 && !gameOver) streak = "Zoom, zoom, zoom.";
+        if(lvl == 9 && !gameOver) streak = "It's all uphill from here.";
+        if(lvl >= 10 && !gameOver) streak = "Now THIS is podracing.";
+
+        g.drawString(streak,50,40);
 
         //game over 'streak'
-        if(gameOver) g.drawString("Womp, womp.", 50, 40);
+        if(gameOver) streak = "Womp, womp.";
 
         //display game over status
         if(gameOver) g.drawString("GAME OVER!", player.x, player.y - 10);
@@ -202,12 +206,16 @@ public class GameLoop extends GameBase {
             obstacles[0].moveLt(speed);
         }
 
-        if (obstacles[0].x < 550) {
+        if (obstacles[0].x < 550 || obstacles[1].x<1000) {
             obstacles[1].moveLt(speed);
         }
 
+        if (obstacles[0].x <= 0 - obstacles[0].w) {
+            genUpperObstacle();
+        }
+
         if (obstacles[1].x < 0 - obstacles[1].w) {
-            genObstacles();
+            genLowerObstacle();
         }
 
     }
