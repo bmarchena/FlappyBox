@@ -8,8 +8,6 @@ public class Rect
 	int w;
 	int h;
 
-	int angle = 0;
-	
 	public Rect(int x, int y, int w, int h)
 	{
 		this.x = x;
@@ -22,14 +20,6 @@ public class Rect
 	public boolean overlaps(Rect r)
 	{
 		return (y+h >= r.y) && (r.y+r.h >= y) && (x+w >= r.x) && (r.x+r.w >= x);
-	}
-	
-	public boolean contains(int mx, int my)
-	{
-		return (mx >= x)      &&
-				 (mx <= x + w)  &&
-				 (my >= y)      &&
-				 (my <= y + h);
 	}
 
 	

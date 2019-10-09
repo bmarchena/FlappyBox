@@ -1,13 +1,10 @@
 import java.awt.event.*;
 import java.applet.Applet;
 
-public abstract class GameBase extends Applet implements Runnable, KeyListener, MouseListener
+public abstract class GameBase extends Applet implements Runnable, KeyListener
 {
 	Thread t;
-		
-	public static final int DN = KeyEvent.VK_DOWN;
-	public static final int LT = KeyEvent.VK_LEFT;
-	public static final int RT = KeyEvent.VK_RIGHT;
+
 	public static final int SP = KeyEvent.VK_SPACE;
 	public static final int EN = KeyEvent.VK_ENTER;
 
@@ -17,19 +14,15 @@ public abstract class GameBase extends Applet implements Runnable, KeyListener, 
 	public static final int _4 = KeyEvent.VK_4;
 	
 	boolean[] released = new boolean[1024];
-	
-	
+
 	public abstract void initialize();
 
-	
 	public void init()
 	{
 		initialize();
 		
 		requestFocus();
 		addKeyListener(this);
-		
-		addMouseListener(this);
 		
 		t = new Thread(this);
 		
@@ -65,11 +58,6 @@ public abstract class GameBase extends Applet implements Runnable, KeyListener, 
 	}
 	
 	public void keyTyped(KeyEvent e) {}
-	
-	public void mousePressed(MouseEvent e)  {}
-	public void mouseReleased(MouseEvent e) {}
-	public void mouseClicked(MouseEvent e)  {}
-	public void mouseEntered(MouseEvent e)  {}
-	public void mouseExited(MouseEvent e)   {}
+
 	
 }

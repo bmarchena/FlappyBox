@@ -1,41 +1,39 @@
 import java.awt.*;
+/*
+    FlappyBox by B. Marchena
+*/
 
 public class GameLoop extends GameBase {
     //gravity and jump constants
-    final static int GRAV_SPEED = 5;
-    private static final int JUMP_HEIGHT = 100;
+    private final static int GRAV_SPEED = 5;
+    private static final int JUMP_HEIGHT = 110;
 
     //player character
-    Rect player;
+    private Rect player;
 
     //initializing counters
-    int mvCount = 0;
-    int spCount = 0;
-    int tmCount = 0;
+    private int spCount = 0;
+    private int tmCount = 0;
 
     //initialize game conditions
-    int lvl = 1;
-    int tm;
-    int recTm;
-    int score = -2;
-    int hiscore = 0;
+    private int lvl = 1;
+    private int recTm;
+    private int score = -2;
+    private int hiscore = 0;
 
-    String streak = "";
+    private String streak = "";
 
     //initial speed of the obstacles
-    int speed = 10;
-
+    private int speed = 10;
 
     //game over condition
-    boolean gameOver = false;
+    private boolean gameOver = false;
 
-    //intializing obstacle array
-    Obstacle[] obstacles = new Obstacle[2];
-
+    //initializing obstacle array
+    private Obstacle[] obstacles = new Obstacle[2];
 
     //fonts for drawing title and stats
-    Font titleFont = new Font("Courier New", 1, 17);
-    Font current;
+    private Font titleFont = new Font("Courier New", 1, 17);
 
 
     @Override
@@ -52,7 +50,6 @@ public class GameLoop extends GameBase {
         //while the game isn't over
         if(!gameOver) {
             //increment counters
-            mvCount++;
             spCount++;
             tmCount++;
 
@@ -132,23 +129,25 @@ public class GameLoop extends GameBase {
     }
 
     public void showStats(Graphics g){
-        tm = tmCount/60;
+        //calculate time for display
+        int tm = tmCount / 60;
 
-        //display level
-        g.drawString("Level " + Integer.toString(lvl), 50, 20);
+        //display current level count
+        g.drawString("Level " + lvl, 50, 20);
 
-        current = g.getFont();
+        //setting title in distinct font
+        Font current = g.getFont();
         g.setFont(titleFont);
         g.drawString("FlappyBox", 450, 30);
         g.setFont(current);
 
         //display scores
-        g.drawString("Score:   " + Integer.toString(score), 750, 20);
-        g.drawString("High Score: " + Integer.toString(hiscore), 750, 40);
+        g.drawString("Score:   " + score, 750, 20);
+        g.drawString("High Score: " + hiscore, 750, 40);
 
         //display times
-        g.drawString("Current Time: " + Integer.toString(tm), 850, 20);
-        g.drawString("Record Time:  " + Integer.toString(recTm), 850, 40);
+        g.drawString("Current Time: " + tm, 850, 20);
+        g.drawString("Record Time:  " + recTm, 850, 40);
 
 
         //scorestreaks
@@ -163,6 +162,7 @@ public class GameLoop extends GameBase {
         if(lvl == 9 && !gameOver) streak = "It's all uphill from here.";
         if(lvl >= 10 && !gameOver) streak = "Now THIS is podracing.";
 
+        //display scorestreak
         g.drawString(streak,50,40);
 
         //game over 'streak'
@@ -180,8 +180,8 @@ public class GameLoop extends GameBase {
         int w;
         int h;
 
-        w = getRandomNumberInRange(100,300);
-        h = getRandomNumberInRange(200,400);
+        w = getRandomNumberInRange(100,300); // min width: 100; max width: 300
+        h = getRandomNumberInRange(200,400); // min height: 200; max height: 400
         obstacles[0] = new UpperObstacle(w, h);
         score++;
 
@@ -192,9 +192,9 @@ public class GameLoop extends GameBase {
         int w;
         int h;
 
-        y = getRandomNumberInRange(400,600);
-        w = getRandomNumberInRange(100,300);
-        h = 680 - y;
+        y = getRandomNumberInRange(400,600); //min y: 400; max y: 600
+        w = getRandomNumberInRange(100,300); //min width: 100; max width: 300
+        h = 680 - y; //height is set to the remaining length between y and floor
         obstacles[1] = new LowerObstacle(y, w, h);
         score++;
 
@@ -206,19 +206,23 @@ public class GameLoop extends GameBase {
     }
 
     private void moveObstacles(){
-
+        //if the upper obstacle isn't off the screen, move it
         if (obstacles[0].x > 0 - obstacles[0].w) {
             obstacles[0].moveLt(speed);
         }
 
+        // if the upper obstacle is halfway across OR
+        // the lower obstacle is already on screen, move the lower obstacle.
         if (obstacles[0].x < 550 || obstacles[1].x<1000) {
             obstacles[1].moveLt(speed);
         }
 
+        //if upper obstacle leaves the screen, generate a new one
         if (obstacles[0].x <= 0 - obstacles[0].w) {
             genUpperObstacle();
         }
 
+        //if lower obstacle leaves the screen, generate a new one
         if (obstacles[1].x < 0 - obstacles[1].w) {
             genLowerObstacle();
         }
@@ -226,9 +230,12 @@ public class GameLoop extends GameBase {
     }
 
     private void drawObstacles(Graphics g){
+        //draw each obstacle
         for(int i=0;i<2;i++){
             obstacles[i].draw(g);
         }
+
+        //draw the floor and ceiling
         g.drawLine(0,50,1000,50); //ceiling
         g.drawLine(0,680,1000,680); //floor
     }
