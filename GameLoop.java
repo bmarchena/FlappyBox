@@ -68,7 +68,7 @@ public class GameLoop extends GameBase {
             moveObstacles();
 
             //check for collisions
-            collisionDetect();
+            detectCollisions();
         }
 
         //if game over, press enter to restart
@@ -78,7 +78,7 @@ public class GameLoop extends GameBase {
 
     }
 
-    private void collisionDetect() {
+    private void detectCollisions() {
         //if player hits an obstacle, game over
         if(obstacles[0].overlaps(player))  gameOver = true;
         if(obstacles[1].overlaps(player))  gameOver = true;
@@ -86,6 +86,16 @@ public class GameLoop extends GameBase {
         //if player hits the floor or ceiling, game over
         if(player.y < 50)                  gameOver = true;
         if(player.y + player.h > 680)      gameOver = true;
+
+        //if upper obstacle leaves the screen, generate a new one
+        if (obstacles[0].x <= 0 - obstacles[0].w) {
+            genUpperObstacle();
+        }
+
+        //if lower obstacle leaves the screen, generate a new one
+        if (obstacles[1].x < 0 - obstacles[1].w) {
+            genLowerObstacle();
+        }
     }
 
     public void restartGame(){
@@ -142,8 +152,8 @@ public class GameLoop extends GameBase {
         g.setFont(current);
 
         //display scores
-        g.drawString("Score:   " + score, 750, 20);
-        g.drawString("High Score: " + hiscore, 750, 40);
+        g.drawString("Score:   " + score, 730, 20);
+        g.drawString("High Score: " + hiscore, 730, 40);
 
         //display times
         g.drawString("Current Time: " + tm, 850, 20);
@@ -217,15 +227,6 @@ public class GameLoop extends GameBase {
             obstacles[1].moveLt(speed);
         }
 
-        //if upper obstacle leaves the screen, generate a new one
-        if (obstacles[0].x <= 0 - obstacles[0].w) {
-            genUpperObstacle();
-        }
-
-        //if lower obstacle leaves the screen, generate a new one
-        if (obstacles[1].x < 0 - obstacles[1].w) {
-            genLowerObstacle();
-        }
 
     }
 
