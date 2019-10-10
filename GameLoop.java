@@ -7,7 +7,7 @@ import java.awt.*;
 public class GameLoop extends GameBase {
     //gravity and jump constants
     private final static int GRAV_SPEED = 5;
-    private static final int JUMP_HEIGHT = 110;
+    private static final int JUMP_HEIGHT = 100;
 
     //player character
     private Rect player;
@@ -22,6 +22,7 @@ public class GameLoop extends GameBase {
     private int score = -2;
     private int hiscore = 0;
 
+    //initialize streak
     private String streak = "";
 
     //initial speed of the obstacles
@@ -81,8 +82,8 @@ public class GameLoop extends GameBase {
 
     private void detectCollisions() {
         //if player hits an obstacle, game over
-        if(obstacles[0].overlaps(player))  gameOver = true;
-        if(obstacles[1].overlaps(player))  gameOver = true;
+        if(player.overlaps(obstacles[0]))  gameOver = true;
+        if(player.overlaps(obstacles[1]))  gameOver = true;
 
         //if player hits the floor or ceiling, game over
         if(player.y < 50)                  gameOver = true;
@@ -188,6 +189,7 @@ public class GameLoop extends GameBase {
     }
 
     private void genUpperObstacle(){
+        //generates an obstacle with an upper-bound of the ceiling
         int w;
         int h;
 
@@ -199,6 +201,7 @@ public class GameLoop extends GameBase {
     }
 
     private void genLowerObstacle(){
+        //generates an obstacle with a lower-bound of the floor
         int y;
         int w;
         int h;

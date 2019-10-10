@@ -22,7 +22,6 @@ public class Rect
 		return (y+h >= r.y) && (r.y+r.h >= y) && (x+w >= r.x) && (r.x+r.w >= x);
 	}
 
-	
 	public void draw(Graphics g)
 	{
 		g.drawRect(x, y, w, h);
