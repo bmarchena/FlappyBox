@@ -1,7 +1,7 @@
-import java.awt.*;
 /*
     FlappyBox by B. Marchena
 */
+import java.awt.*;
 
 public class GameLoop extends GameBase {
     //gravity and jump constants
