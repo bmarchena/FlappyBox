@@ -1,6 +1,7 @@
 /*
     FlappyBox by B. Marchena
 */
+
 import java.awt.*;
 
 public class GameLoop extends GameBase {
