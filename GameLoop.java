@@ -35,13 +35,13 @@ public class GameLoop extends GameBase {
     private Obstacle[] obstacles = new Obstacle[2];
 
     //fonts for drawing title and stats
-    private Font titleFont = new Font("Courier New", 1, 17);
+    private Font titleFont = new Font("Helvetica", 1, 18);
 
 
     @Override
     public void initialize() {
         //initialize player
-        player = new Rect(100, 400, 30, 30);
+        player = new Rect(100, 400, 40, 40);
 
         //create obstacles
         genObstacles();
@@ -71,6 +71,9 @@ public class GameLoop extends GameBase {
 
             //check for collisions
             detectCollisions();
+
+            //handle collisions
+            handleCollisions();
         }
 
         //if game over, press enter to restart
@@ -98,6 +101,10 @@ public class GameLoop extends GameBase {
         if (obstacles[1].x < 0 - obstacles[1].w) {
             genLowerObstacle();
         }
+    }
+
+    private void handleCollisions(){
+
     }
 
     public void restartGame(){
@@ -208,7 +215,7 @@ public class GameLoop extends GameBase {
 
         y = getRandomNumberInRange(400,600); //min y: 400; max y: 600
         w = getRandomNumberInRange(100,300); //min width: 100; max width: 300
-        h = 680 - y; //height is set to the remaining length between y and floor
+        h = 650 - y; //height is set to the remaining length between y and floor
         obstacles[1] = new LowerObstacle(y, w, h);
         score++;
 
@@ -242,6 +249,6 @@ public class GameLoop extends GameBase {
 
         //draw the floor and ceiling
         g.drawLine(0,50,1000,50); //ceiling
-        g.drawLine(0,680,1000,680); //floor
+        g.drawLine(0,650,1000,650); //floor
     }
 }
